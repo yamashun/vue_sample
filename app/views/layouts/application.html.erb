@@ -9,6 +9,27 @@
   </head>
 
   <body>
-    <%= yield %>
+    <header class="nav">
+      <div class="nav-left">
+        <span class="nav-item">
+          <span class="fa fa-language"></span>車両管理
+        </span>
+      </div>
+    </header>
+    <div class="hero is-info is-bold">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">RailsとVue</h1>
+          <h2 class="subtitle">vue-routerによるルーティング / vuexによるstate管理</h2>
+        </div>
+      </div>
+    </div>
+    <main class="columns">
+      <div class="column" >
+        <div class="box media" >
+          <%= yield %>
+        </div>
+      </div>
+    </main>
   </body>
 </html>
