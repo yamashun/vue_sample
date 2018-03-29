@@ -1,35 +1,33 @@
 // html
 <template>
-  <div class="section">
-    <div class="container">
-      <h1 class="title">メーカーと車種を選択してください</h1>
-      <div class="box">
-        <div class="field">
-          <label class="label">メーカー: {{ car.maker.name }} </label>
-          <div class="control">
-            <div class="select is-medium">
-              <select v-model="car.maker" class="CarModelSelectList" @change="fetchModels">
-                <option v-for="maker in makers" v-bind:value="maker">
-                    {{ maker.name }}
-                </option>
-              </select>
-            </div>
+  <div class="container">
+    <h1 class="title">メーカーと車種を選択してください</h1>
+    <div class="box">
+      <div class="field">
+        <label class="label">メーカー: {{ car.maker.name }} </label>
+        <div class="control">
+          <div class="select is-medium">
+            <select v-model="car.maker" class="CarModelSelectList" @change="fetchModels">
+              <option v-for="maker in makers" v-bind:value="maker">
+                  {{ maker.name }}
+              </option>
+            </select>
           </div>
         </div>
-        <div class="field">
-          <label class="label">車種: {{ car.model ? car.model.name : "" }}</label>
-          <div class="control">
-            <div class="select is-medium">
-              <select v-model="car.model" class="CarModelSelectList" >
-                <option v-for="model in models" v-bind:value="model">
-                    {{ model.name }}
-                </option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <button class="button is-link is-outlined" v-on:click="nextPage()">次へ</button>
       </div>
+      <div class="field">
+        <label class="label">車種: {{ car.model ? car.model.name : "" }}</label>
+        <div class="control">
+          <div class="select is-medium">
+            <select v-model="car.model" class="CarModelSelectList" >
+              <option v-for="model in models" v-bind:value="model">
+                  {{ model.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <button class="button is-info is-outlined" v-on:click="nextPage()">次へ</button>
     </div>
   </div>
   
@@ -51,6 +49,11 @@
     },
     mounted: function () {
       this.fetchMakers();
+      this.car.maker = this.$store.getters.maker_obj;
+      if(this.car.maker.id) {
+        this.fetchModels();
+        this.car.model = this.$store.getters.model_obj;
+      }
     },
     methods: {
       fetchMakers: function () {
@@ -68,7 +71,7 @@
           });
       },
       nextPage: function() {
-        // this.$store.commit('setMaker', this.car);
+        this.$store.commit('setCar', this.car);
         this.$router.push('/cars/new_price');
       },
     },
