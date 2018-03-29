@@ -28,6 +28,7 @@
             </div>
           </div>
         </div>
+        <button class="button is-link is-outlined" v-on:click="nextPage()">次へ</button>
       </div>
     </div>
   </div>
@@ -65,6 +66,10 @@
             this.models = res.data.car_models;
             console.log(this.models)
           });
+      },
+      nextPage: function() {
+        // this.$store.commit('setMaker', this.car);
+        this.$router.push('/cars/new_price');
       },
     },
   }

@@ -1,8 +1,6 @@
 import Vue from 'vue/dist/vue.esm'
-import NewCar from '../components/cars/new_car.vue'
+import router from '../router/car'
 
-new Vue({
-  el: '#car_form',
-  components: { NewCar },
-  template: '<new-car></new-car>'
-})
+const new_root = new Vue({
+  router,
+}).$mount('#car_form');
