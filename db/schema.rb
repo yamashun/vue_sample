@@ -22,9 +22,9 @@ ActiveRecord::Schema.define(version: 20180327135102) do
 
   create_table "cars", force: :cascade do |t|
     t.integer "maker_id"
-    t.string "maker"
+    t.string "maker_name"
     t.integer "car_model_id"
-    t.string "car_model"
+    t.string "car_model_name"
     t.integer "price"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

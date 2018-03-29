@@ -10,6 +10,6 @@ class Api::CarsController < ApiController
 
   private
     def car_params
-      params.require(:car).permit(:maker_id, :maker, :car_model_id, :car_model, :price)
+      params.require(:car).permit(:maker_id, :maker_name, :car_model_id, :car_model_name, :price)
     end
 end
