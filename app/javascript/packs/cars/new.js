@@ -1,7 +1,8 @@
 import Vue from 'vue/dist/vue.esm'
-import App from '../../app.vue'
+import NewCar from '../components/cars/new_car.vue'
 
 new Vue({
   el: '#car_form',
-  template: '<div>Hello Vue!!</div>'
+  components: { NewCar },
+  template: '<new-car></new-car>'
 })
