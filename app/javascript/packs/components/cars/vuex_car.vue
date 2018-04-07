@@ -3,11 +3,11 @@
     <h1 class="title">メーカーと車種を選択してください</h1>
     <div class="box">
       <div class="field">
-        <label class="label">メーカー: {{ car.maker.name }} </label>
+        <label class="label">メーカー</label>
         <div class="control">
           <div class="select is-medium">
-            <select v-model="car.maker" class="CarModelSelectList" name="car_model_list">
-              <option v-for="maker in makers" v-bind:value="maker">
+            <select v-model="car.maker.id" class="CarModelSelectList" name="car_model_list" @change="fetchModels">
+              <option v-for="maker in makers" v-bind:key="maker.id" v-bind:value="maker.id">
                   {{ maker.name }}
               </option>
             </select>
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-  import * as types from "../../store/types"
+  import axios from 'axios';
 
   export default {
     data: function () {
@@ -42,15 +42,26 @@
           maker: { name: "", id: null },
           model: { name: "", id: null },
         },
-        makers: [{id: 1, name: "トヨタ"}],
-        models: [
-          {id: 1, name: "カローラ"},
-          {id: 2, name: "クラウン"},
-          {id: 3, name: "86"},
-        ],
+        makers: [],
+        models: [],
       }
     },
+    mounted: function() {
+      this.fetchMakers();
+    },
     methods: {
+      fetchMakers: function () {
+        axios.get(`../api/makers`)
+          .then(res => {
+            this.makers = res.data.makers;
+            console.log(this.makers)
+          });
+      },
+      async fetchModels () {
+        console.log("start getchModels !!!!")
+        const res = await axios.get(`../api/car_models/${this.car.maker.id}`)
+        this.models = res.data.car_models;
+      },
       nexPage: function(){
         this.$store.dispatch('setCar', this.car)
       },
