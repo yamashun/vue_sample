@@ -9,10 +9,25 @@
       "useBuiltIns": true
     }]
   ],
-
   "plugins": [
     "syntax-dynamic-import",
     "transform-object-rest-spread",
-    ["transform-class-properties", { "spec": true }]
-  ]
+    [
+      "transform-class-properties",
+      {
+        "spec": true
+      }
+    ]
+  ],
+  "env": {
+    "testing": {
+      "presets": [
+        "env",
+        "stage-2"
+      ],
+      "plugins": [
+        "transform-es2015-modules-commonjs"
+      ]
+    }
+  }
 }

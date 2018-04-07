@@ -5,7 +5,7 @@
       <div class="field">
         <label class="label">価格: {{ price }} </label>
         <div class="control">
-          <input type="number" class="input is-primary" v-model="price">
+          <input type="number" class="input is-primary" v-model="price" id="car_price">
         </div>
       </div>
       <button class="button is-warning is-outlined" v-on:click="previousPage()">戻る</button>

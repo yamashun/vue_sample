@@ -1,5 +1,15 @@
 <template>
   <div class="complete">
-    <p>登録が完了しました。</p>
+    <label class="testlabel">登録が完了しました。</label>
   </div>
 </template>
+
+<script>
+  export default {
+    data: function () {
+      return {
+        aaaxxx: ''
+      }
+    }
+  }
+</script>
