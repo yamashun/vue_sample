@@ -38,7 +38,20 @@ describe('VuexCar.vue', () => {
     })
   })
 
-  it('calls store action setCar when next button is clicked', () => {
+  it('メーカー車種が入力されていない場合、次へボタンのクリックイベントが動作しない', () => {
+    delete VuexCar.mounted
+    const wrapper = shallow(VuexCar, {
+      store, localVue, mocks: { $router }
+    })
+    const button = wrapper.find('button')
+    button.trigger('click')
+    //actions.setCarが発行されていること
+    expect(actions.setCar).not.toHaveBeenCalled()
+    //$router.pushが発行されていること
+    expect($router.push).not.toHaveBeenCalled()
+  })
+
+  it('次へボタンをクリックするとsetCarアクションと価格入力画面へのpushが呼ばれる', () => {
     delete VuexCar.mounted
     const wrapper = shallow(VuexCar, {
       store, localVue, mocks: { $router }
