@@ -16,7 +16,7 @@ describe('mutations', () => {
     expect(store.state.maker).toBe("")
     store.commit('setCar', car)
     expect(store.state.maker).toBe("トヨタ")
-  })  
+  })
 })
 
 describe('getters', () => {

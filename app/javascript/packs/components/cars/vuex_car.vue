@@ -26,7 +26,7 @@
           </div>
         </div>
       </div>
-      <button class="button is-info is-outlined" v-on:click="nexPage()">次へ</button>
+      <button class="button is-info is-outlined" v-on:click="nexPage()" :disabled="!isValid">次へ</button>
     </div>
   </div>
   
@@ -58,14 +58,18 @@
           });
       },
       async fetchModels () {
-        console.log("start getchModels !!!!")
         const res = await axios.get(`../api/car_models/${this.car.maker.id}`)
         this.models = res.data.car_models;
       },
       nexPage: function(){
         this.$store.dispatch('setCar', this.car)
+        this.$router.push('/cars/new_price');
       },
     },
-    
+    computed: {
+      isValid: function() {
+        return this.car.maker.id && this.car.model.id
+      }
+    }
   }
 </script>

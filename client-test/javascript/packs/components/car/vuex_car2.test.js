@@ -1,7 +1,8 @@
+// routerにmockを使用するバージョン
+
 import { shallow, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import VuexCar from 'components/cars/vuex_car'
-import VueRouter from 'vue-router'
 
 jest.mock('axios', () => ({
   get: () => new Promise(resolve => {
@@ -20,16 +21,14 @@ jest.mock('axios', () => ({
 const localVue = createLocalVue()
 
 localVue.use(Vuex)
-localVue.use(VueRouter)
-const router = new VueRouter()
-const $router = { push: () => { return '' } }
 
-//アクションが必要なときに発行されていること、そして期待された値によって発行されていることをテスト
 describe('VuexCar.vue', () => {
   let actions
   let store
+  let $router
 
   beforeEach(() => {
+    $router = { push: jest.fn() }
     actions = {
       setCar: jest.fn(),
     }
@@ -39,14 +38,17 @@ describe('VuexCar.vue', () => {
     })
   })
 
-  it('calls store action setCar when next button is clicled', () => {
+  it('calls store action setCar when next button is clicked', () => {
     delete VuexCar.mounted
     const wrapper = shallow(VuexCar, {
-      store, localVue, router
+      store, localVue, mocks: { $router }
     })
     const button = wrapper.find('button')
     button.trigger('click')
+    //actions.setCarが発行されていること
     expect(actions.setCar).toHaveBeenCalled()
+    //$router.pushが発行されていること
+    expect($router.push).toHaveBeenCalled()
   })
 
   it('calls fetchCarModels when makers is selected', (done) => {
@@ -58,7 +60,7 @@ describe('VuexCar.vue', () => {
     ]
 
     const wrapper = shallow(VuexCar, {
-      store, localVue, router
+      store, localVue, mocks: { $router }
     })
     wrapper.setData({
       makers: [
