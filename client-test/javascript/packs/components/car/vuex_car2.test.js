@@ -1,22 +1,9 @@
 // routerにmockを使用するバージョン
-
 import { shallow, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import VuexCar from 'components/cars/vuex_car'
-
-jest.mock('axios', () => ({
-  get: () => new Promise(resolve => {
-    resolve({
-      data: {
-        car_models: [
-          { id: 1, name: "カローラ" },
-          { id: 2, name: "クラウン" },
-          { id: 3, name: "８６" },
-        ]
-      }
-    })
-  })
-}))
+import { makersResponse, modelsResponse } from '../../../test-helpers/mock/car_new'
+jest.mock('axios', () => require('../../../test-helpers/mock/car_new.js'))
 
 const localVue = createLocalVue()
 
@@ -38,21 +25,37 @@ describe('VuexCar.vue', () => {
     })
   })
 
+  // mountedの中でmockは使えない??
+  // https://qiita.com/re-fort/items/63bef6778bf3d3939815
+  // https://github.com/vuejs/vue-test-utils/issues/166
+  it('mountedの中でfetchMakersが呼ばれる', (done) => {
+    const wrapper = shallow(VuexCar, {
+      store, localVue, mocks: { $router }
+    })
+    expect(wrapper.vm.makers).not.toEqual(makersResponse.data.makers)
+    wrapper.vm.$nextTick(() => {
+      expect(wrapper.vm.makers).toEqual(makersResponse.data.makers)
+      done()
+    })
+  })
+
   it('メーカー車種が入力されていない場合、次へボタンのクリックイベントが動作しない', () => {
-    delete VuexCar.mounted
+    console.log('start click test')
     const wrapper = shallow(VuexCar, {
       store, localVue, mocks: { $router }
     })
     const button = wrapper.find('button')
     button.trigger('click')
-    //actions.setCarが発行されていること
+    
+    // イベントが発行されないこと
     expect(actions.setCar).not.toHaveBeenCalled()
-    //$router.pushが発行されていること
     expect($router.push).not.toHaveBeenCalled()
+    console.log('end click test')
   })
 
   it('次へボタンをクリックするとsetCarアクションと価格入力画面へのpushが呼ばれる', () => {
-    delete VuexCar.mounted
+    // delete VuexCar.mounted
+
     const wrapper = shallow(VuexCar, {
       store, localVue, mocks: { $router }
     })
@@ -84,32 +87,23 @@ describe('VuexCar.vue', () => {
     expect($router.push).toHaveBeenCalled()
   })
 
-  it('calls fetchCarModels when makers is selected', (done) => {
-    delete VuexCar.mounted
-    const carModels = [
-      { id: 1, name: "カローラ" },
-      { id: 2, name: "クラウン" },
-      { id: 3, name: "８６" },
-    ]
-
+  it('メーカーが選択されると fetchCarModels が呼ばれる', (done) => {
+    // delete VuexCar.mounted
     const wrapper = shallow(VuexCar, {
       store, localVue, mocks: { $router }
     })
-    wrapper.setData({
-      makers: [
-        { id: 1, name: "トヨタ" },
-        { id: 2, name: "日産" },
-        { id: 3, name: "ホンダ" },
-      ]
-    })
+    expect(wrapper.vm.models).not.toEqual(modelsResponse.data.car_models)
+
     const select = wrapper.find('.CarModelSelectList')
     // https://github.com/vuejs/vue-test-utils/issues/128
     // https://github.com/ariera/vue-test-utils/commit/8e7d5243ad5fdc0036f840981326433033ff5837#comments
     select.element.value = 1
     select.trigger('change')
+
     wrapper.vm.$nextTick(() => {
-      expect(wrapper.vm.models).toEqual(carModels)
+      expect(wrapper.vm.models).toEqual(modelsResponse.data.car_models)
       done()
     })
+    
   })
 })
