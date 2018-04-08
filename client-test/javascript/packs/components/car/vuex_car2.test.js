@@ -57,10 +57,30 @@ describe('VuexCar.vue', () => {
       store, localVue, mocks: { $router }
     })
     const button = wrapper.find('button')
+    // データを設定する前は、disabled属性が設定されていること
+    expect(button.element.getAttribute('disabled')).toBe('disabled')
+
+    // メーカー、車種のidを設定する
+    wrapper.setData({
+      car: {
+        maker: { name: "", id: 1 },
+        model: { name: "", id: 1 },
+      }
+    })
+    
+    expect(wrapper.vm.car.maker.id).toBe(1)
+    // computedへの反映のさせ方が不明。issueはv-modelの話だが関連してそう。
+    // https://github.com/vuejs/vue-test-utils/issues/514
+    // 一旦はissueにのっている $forceUpdate()を使って回避
+    wrapper.vm.$forceUpdate()
+
+    // データを設定後は、disabled属性が設定されていないこと
+    // もっといい書き方がありそう
+    expect(button.element.getAttribute('disabled')).toBe(null)
+
     button.trigger('click')
-    //actions.setCarが発行されていること
+    
     expect(actions.setCar).toHaveBeenCalled()
-    //$router.pushが発行されていること
     expect($router.push).toHaveBeenCalled()
   })
 
