@@ -50,12 +50,9 @@
       this.fetchMakers();
     },
     methods: {
-      fetchMakers: function () {
-        axios.get(`../api/makers`)
-          .then(res => {
-            this.makers = res.data.makers;
-            console.log(this.makers)
-          });
+      async fetchMakers () {
+        const res = await axios.get(`../api/makers`)
+        this.makers = res.data.makers;
       },
       async fetchModels () {
         const res = await axios.get(`../api/car_models/${this.car.maker.id}`)
@@ -72,4 +69,5 @@
       }
     }
   }
+  
 </script>
